@@ -43,75 +43,114 @@ if __name__ == '__main__':
                                                 + str(available_roles[index].name))
 
 
-    @client.event
-    async def on_message(message):
-        if message.author == client.user:
-            return
+    @client.command()
+    async def mute(ctx):
+        message_content = ctx.message.content.split(" ")
+        userIDString = message_content[1]
+        user_id = int(message_content[1])
+        timeoutRole = discord.utils.get(ctx.guild.roles, name = "Timeout")
 
-        if message.content.startswith("$hello"):
-            await message.channel.send("Hello!")
+        for member in ctx.guild.members:
+            print(member.name)
 
-        if message.content.startswith("$test"):
-            guild = message.guild
-            await message.channel.send(guild.name)
+        try:
+            user_to_mute = discord.utils.get(ctx.guild.members, id=user_id)
+            await user_to_mute.add_roles(timeoutRole)
+            await ctx.send('success')
+        except:
+            await ctx.send('yikes')
 
-        if message.content.startswith("$mute"):
-            guild = message.guild
-            message_content = message.content.split()
-            if len(message_content) == 1:
-                await message.channel.send("Please specify the user id of the user you would like to mute")
-            else:
-                user_id = message_content[1]
-                timeoutRole = guild.get_role(839236832398671913)
-                user = await message.guild.fetch_member(user_id)
-                await user.add_roles(timeoutRole)
 
-        if message.content.startswith("$unmute"):
-            guild = message.guild
-            message_content = message.content.split()
-            if len(message_content) == 1:
-                await message.channel.send("Please specify the user id of the user you would like to unmute")
-            else:
-                user_id = message_content[1]
-                timeoutRole = guild.get_role(839236832398671913)
-                user = await message.guild.fetch_member(user_id)
-                await user.remove_roles(timeoutRole)
+    @client.command()
+    async def kick(ctx):
+        message_content = ctx.message.content.split(" ")
+        #userIDString = message_content[1]
+        user_id = int(message_content[1])
+        #timeoutRole = discord.utils.get(ctx.guild.roles, name="Timeout")
 
-        if message.content.startswith("$kick"):
-            guild = message.guild
-            message_content = message.content.split()
-            if len(message_content) == 1:
-                await message.channel.send("Please specify the user id of the user you would like to kick")
-            else:
-                user_id = message_content[1]
-                user = await message.guild.fetch_member(user_id)
-                await guild.kick(user)
+        for member in ctx.guild.members:
+            print(member.name)
 
-        if message.content.startswith("$rolekick"):
-            guild = message.guild
-            message_content = message.content.split()
-            membersList = guild.members
-            print(guild.members)
-            if len(message_content) == 1:
-                await message.channel.send("Please specify the role id of the roles you would like to kick")
-            else:
-                kickedRoleID = int(message_content[1])
-                kickedRole = guild.get_role(kickedRoleID)
-                for member in membersList:
-                    currentMemberRoleList = member.roles
-                    for role in currentMemberRoleList:
-                        if role == kickedRole:
-                            await guild.kick(member)
+        try:
+            user_to_mute = discord.utils.get(ctx.guild.members, id=user_id)
+            await ctx.guild.kick(user_to_mute)
+            await ctx.send('success')
+        except:
+            await ctx.send('yikes')
 
-        if message.content.startswith("$ban"):
-            guild = message.guild
-            message_content = message.content.split()
-            if len(message_content) == 1:
-                await message.channel.send("Please specify the role id of the roles you would like to ban")
-            else:
-                user_id = message_content[1]
-                user = await message.guild.fetch_member(user_id)
-                await guild.ban(user)
+
+    @client.command()
+    async def ban(ctx):
+        message_content = ctx.message.content.split(" ")
+        # userIDString = message_content[1]
+        user_id = int(message_content[1])
+        # timeoutRole = discord.utils.get(ctx.guild.roles, name="Timeout")
+
+        for member in ctx.guild.members:
+            print(member.name)
+
+        try:
+            user_to_mute = discord.utils.get(ctx.guild.members, id=user_id)
+            await ctx.guild.ban(user_to_mute)
+            await ctx.send('success')
+        except:
+            await ctx.send('yikes')
+
+
+    @client.command()
+    async def unmute(ctx):
+        message_content = ctx.message.content.split(" ")
+        # userIDString = message_content[1]
+        user_id = int(message_content[1])
+        timeoutRole = discord.utils.get(ctx.guild.roles, name="Timeout")
+
+        for member in ctx.guild.members:
+            print(member.name)
+
+        try:
+            user_to_mute = discord.utils.get(ctx.guild.members, id=user_id)
+            await user_to_mute.remove_roles(timeoutRole)
+            await ctx.send('success')
+        except:
+            await ctx.send('yikes')
+
+    # async def rolekick(ctx):
+    #     message_content = ctx.message.content.split(" ")
+    #     # userIDString = message_content[1]
+    #     membersList = ctx.guild.members
+    #     #timeoutRole = discord.utils.get(ctx.guild.roles, name="Timeout")
+    #
+    #     for member in ctx.guild.members:
+    #         print(member.name)
+    #
+    #     try:
+    #         role_to_kick = discord.utils.get(ctx.guild.roles)
+    #         for member in membersList:
+    #             currentMemberRoleList = member.roles
+    #                 for role in currentMemberRoleList:
+    #                     if role == role_to_kick:
+    #                         await ctx.guild.kick(member)
+    #     except:
+    #         await ctx.send('yikes')
+
+
+
+    #     if message.content.startswith("$rolekick"):
+    #         guild = message.guild
+    #         message_content = message.content.split()
+    #         membersList = guild.members
+    #         print(guild.members)
+    #         if len(message_content) == 1:
+    #             await message.channel.send("Please specify the role id of the roles you would like to kick")
+    #         else:
+    #             kickedRoleID = int(message_content[1])
+    #             kickedRole = guild.get_role(kickedRoleID)
+    #             for member in membersList:
+    #                 currentMemberRoleList = member.roles
+    #                 for role in currentMemberRoleList:
+    #                     if role == kickedRole:
+    #                         await guild.kick(member)
+
 
 
     @client.command()
